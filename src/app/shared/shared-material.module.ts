@@ -6,6 +6,7 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
+import {MatTableModule} from '@angular/material/table';
 
 @NgModule({
   imports: [
@@ -17,7 +18,8 @@ import {MatInputModule} from "@angular/material/input";
     MatFormFieldModule,
     MatInputModule,
     NgFor,
-    AsyncPipe
+    AsyncPipe,
+    MatTableModule
   ],
   exports: [
     MatToolbarModule,
@@ -27,7 +29,8 @@ import {MatInputModule} from "@angular/material/input";
     MatFormFieldModule,
     MatInputModule,
     NgFor,
-    AsyncPipe
+    AsyncPipe,
+    MatTableModule
   ]
 })
 export class SharedMaterialModule { }
