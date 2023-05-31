@@ -26,5 +26,9 @@
 </mat-dialog-content>
 <mat-dialog-actions>
   <button mat-button mat-dialog-close>Cancelar</button>
-  <button mat-button [mat-dialog-close]="true" cdkFocusInitial [disabled]="formGroup.invalid">Salvar</button>
+  <button mat-button cdkFocusInitial (click)="createStock()"
+          [mat-dialog-close]="true"
+          [disabled]="formGroup.invalid">
+    Salvar
+  </button>
 </mat-dialog-actions>
