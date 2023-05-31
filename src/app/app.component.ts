@@ -62,6 +62,9 @@ export class AppComponent implements AfterViewInit {
           stock = res;
         }),
         switchMap(() => this.service.deleteStock(stock.id)),
+        tap(() => {
+          this.updateTable();
+        }),
         finalize(() => {
           this.updateTable();
         })
