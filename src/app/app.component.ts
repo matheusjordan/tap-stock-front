@@ -3,13 +3,14 @@ import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import {SharedMaterialModule} from "./shared/shared-material.module";
 import {SharedComponentsModule} from "./shared/components/shared-components.module";
-import {MatDialog} from "@angular/material/dialog";
+import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
 import {DetailedStockComponent} from "./shared/components/detailed-stock/detailed-stock.component";
 import {HttpClientModule} from "@angular/common/http";
 import {AppService} from "./app.service";
 import {ListStockComponent} from "./shared/components/list-stock/list-stock.component";
 import {finalize, switchMap, tap} from "rxjs";
 import {StockModel} from "./shared/models/stock-model";
+import {MatSnackBar, MatSnackBarConfig} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'mjx-root',
@@ -26,6 +27,7 @@ export class AppComponent implements AfterViewInit {
 
   constructor(
     private dialog: MatDialog,
+    private snack: MatSnackBar,
     private service: AppService
   ) {}
 
@@ -49,6 +51,13 @@ export class AppComponent implements AfterViewInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        if (data) {
+          this.snack.open('Editado com sucesso!', null, this.dialogConfig);
+        } else {
+          this.snack.open('Salvo com sucesso!', null, this.dialogConfig);
+        }
+      }
       this.updateTable();
     });
   }
@@ -63,7 +72,7 @@ export class AppComponent implements AfterViewInit {
         }),
         switchMap(() => this.service.deleteStock(stock.id)),
         tap(() => {
-          this.updateTable();
+          this.snack.open('Deletado com sucesso!', null, this.dialogConfig);
         }),
         finalize(() => {
           this.updateTable();
@@ -79,5 +88,11 @@ export class AppComponent implements AfterViewInit {
           this.openDialog(res);
         })
       ).subscribe()
+  }
+
+  private get dialogConfig(): MatSnackBarConfig {
+    return {
+      duration: 1300
+    }
   }
 }
