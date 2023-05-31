@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, EventEmitter, Output} from '@angular/core';
 import {StockModel} from "../../models/stock-model";
 import {AppService} from "../../../app.service";
 import {finalize, tap} from "rxjs";
@@ -9,8 +9,11 @@ import {finalize, tap} from "rxjs";
   styleUrls: ['./list-stock.component.scss']
 })
 export class ListStockComponent {
-  displayedColumns: string[] = ['id', 'name', 'amount', 'value', 'total'];
+  displayedColumns: string[] = ['id', 'name', 'amount', 'value', 'total', 'actions'];
   dataSource: StockModel[] = [];
+
+  @Output('delete') deleteEvent = new EventEmitter();
+  @Output('edit') editEvent = new EventEmitter();
 
   loadingStocks: boolean;
 
