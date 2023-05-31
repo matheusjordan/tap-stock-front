@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import {Component, Inject} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {AppService} from "../../../app.service";
 import {finalize, tap} from "rxjs";
-import {MatDialogRef} from "@angular/material/dialog";
+import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
+import {StockModel} from "../../models/stock-model";
 
 @Component({
   selector: 'mjx-detailed-stock',
@@ -13,16 +14,30 @@ import {MatDialogRef} from "@angular/material/dialog";
 export class DetailedStockComponent {
   formGroup: FormGroup;
   isLoading: boolean;
+  isEdit: boolean;
 
   constructor(
     private fb: FormBuilder,
     private service: AppService,
-    private matDialog: MatDialogRef<DetailedStockComponent>
+    private matDialog: MatDialogRef<DetailedStockComponent>,
+    @Inject(MAT_DIALOG_DATA) data: StockModel
   ) {
     this.buildForm();
+    if (data) {
+      this.isEdit = true;
+      this.formGroup.patchValue(data);
+    }
   }
 
-  createStock() {
+  saveStock() {
+    if (this.isEdit) {
+      this.editStock();
+    } else {
+      this.createStock();
+    }
+  }
+
+  private createStock() {
     this.isLoading = true;
     this.service
       .createStock(this.formGroup.value)
@@ -36,7 +51,7 @@ export class DetailedStockComponent {
       ).subscribe();
   }
 
-  editStock() {
+  private editStock() {
     this.service
       .updateStock(this.formGroup.value.id, this.formGroup.value)
       .pipe(
