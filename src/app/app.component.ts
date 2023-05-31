@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, ViewChild} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import {SharedMaterialModule} from "./shared/shared-material.module";
@@ -7,6 +7,7 @@ import {MatDialog} from "@angular/material/dialog";
 import {DetailedStockComponent} from "./shared/components/detailed-stock/detailed-stock.component";
 import {HttpClientModule} from "@angular/common/http";
 import {AppService} from "./app.service";
+import {ListStockComponent} from "./shared/components/list-stock/list-stock.component";
 
 @Component({
   selector: 'mjx-root',
@@ -19,9 +20,16 @@ import {AppService} from "./app.service";
 export class AppComponent {
   title = 'Estoque App';
 
+  @ViewChild(RouterOutlet) outlet: RouterOutlet;
+
   constructor(
-    public dialog: MatDialog
+    private dialog: MatDialog
   ) {}
+
+  updateTable() {
+    const list = this.outlet.component as ListStockComponent;
+    list.getStocks();
+  }
 
   openDialog() {
     const dialogRef = this.dialog.open(DetailedStockComponent, {

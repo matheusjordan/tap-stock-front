@@ -3,10 +3,13 @@
     <h2>{{ title }}</h2>
     <div class="spacer"></div>
     <div class="spacer"></div>
+    <button mat-icon-button (click)="updateTable()">
+      <mat-icon>refresh</mat-icon>
+    </button>
     <button mat-icon-button (click)="openDialog()">
       <mat-icon>add</mat-icon>
     </button>
   </mat-toolbar-row>
 </mat-toolbar>
-<mjx-search-stock></mjx-search-stock>
+<!--<mjx-search-stock></mjx-search-stock>-->
 <router-outlet></router-outlet>

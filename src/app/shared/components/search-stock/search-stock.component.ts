@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {FormControl} from "@angular/forms";
-import {map, Observable, startWith} from "rxjs";
+import {finalize, map, Observable, startWith, tap} from "rxjs";
 import {StockModel} from "../../models/stock-model";
+import {AppService} from "../../../app.service";
 
 @Component({
   selector: 'mjx-search-stock',
@@ -11,20 +12,31 @@ import {StockModel} from "../../models/stock-model";
 })
 export class SearchStockComponent {
   searchControl = new FormControl(null);
-  options: StockModel[] = [
-    { id: '1', name: 'Coca-Cola', amount: 5, value: 8 },
-    { id: '2', name: 'Guaraná', amount: 3, value: 7 },
-    { id: '3', name: 'Fanta', amount: 7, value: 7 },
-    { id: '4', name: 'Soda', amount: 5, value: 6 },
-    { id: '5', name: 'Fanta Uva', amount: 3, value: 7 },
-  ];
+  options: StockModel[] = [];
   filteredOptions: Observable<StockModel[]>;
+  isLoading: boolean;
+
+  constructor(private service: AppService) { }
 
   ngOnInit() {
+    this.getStocks();
     this.filteredOptions = this.searchControl.valueChanges.pipe(
       startWith(''),
       map(value => this._filter(value || '')),
     );
+  }
+
+  private getStocks() {
+    this.isLoading = true;
+    this.service.getStocks()
+      .pipe(
+        tap((res) => {
+          this.options = res;
+        }),
+        finalize(() => {
+          this.isLoading = false;
+        })
+      ).subscribe()
   }
 
   private _filter(value: string): StockModel[] {
